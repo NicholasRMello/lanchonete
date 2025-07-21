@@ -19,17 +19,9 @@ public class Lanchonete {
         Banco b = new Banco();
         Connection conexao = b.conectar();
         
-        Lanche l = new Lanche("Café Expresso", 5.90);
+        Lanche l = new Lanche("Café Gelado", 9.90);
         
-        if (conexao != null) {
-            try {
-                b.salvar(l, conexao);
-                conexao.close();
-            } catch(SQLException e) {
-                System.out.println("Erro ao fechar a conexão com o banco de dados!");
-            }
-           
-        }
+        b.salvar(l, conexao);
         
     }
 }
