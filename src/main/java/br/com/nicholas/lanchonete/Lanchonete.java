@@ -9,6 +9,7 @@ import br.com.nicholas.lanchonete.model.Lanche;
 import br.com.nicholas.lanchonete.view.GUIMenu;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,6 +31,13 @@ public class Lanchonete {
         GUIMenu janelaPrincipal = new GUIMenu();
         Banco b = new Banco();
         b.inicializarBanco();
+        
+        ArrayList<Lanche> lanches = b.buscarPorTrechoNome("pastel");
+        
+        for (Lanche lanche : lanches) {
+            lanche.apresentarLanche();
+        }
+        
         b = null;
         
 

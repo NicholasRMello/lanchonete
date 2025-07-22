@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.text.Normalizer;
+import java.util.ArrayList;
 
 public class Banco {
     private String url;
@@ -95,6 +97,43 @@ public class Banco {
             System.out.println("Erro ao ler arquivo banco.sql");
             e.printStackTrace();
         }
+        
+    }
+     
+    public ArrayList<Lanche> buscarPorTrechoNome(String trechoNome) {
+        ArrayList<Lanche> listaDeLanches = new ArrayList<>();
+        
+        String trechoNormalizado = "%" + normalizarTexto(trechoNome) + "%";
+        String sql = "SELECT * FROM lanche WHERE nome LIKE ?";
+        
+        try {
+            Connection conexao = conectar();
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            
+            stmt.setString(1, trechoNormalizado);
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                double preco = rs.getDouble("preco");
+                Lanche lanche = new Lanche(nome, preco);
+                lanche.setId(id);
+                
+                listaDeLanches.add(lanche);
+            }
+            
+            rs.close();
+            stmt.close();
+            conexao.close();
+        } catch(SQLException e) {
+            System.out.println("Não conseguiu conectar no banco de dados no método buscarPorTrechoNome()");
+        }
+        return listaDeLanches;
+    }
+    private String normalizarTexto(String trecho) {
+        return Normalizer.normalize(trecho, Normalizer.Form.NFD).replace("[^\\p(ASCII)]", "");
     }
 }
 
