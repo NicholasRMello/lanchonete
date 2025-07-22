@@ -4,6 +4,9 @@
  */
 package br.com.nicholas.lanchonete.model;
 
+import br.com.nicholas.lanchonete.controller.Banco;
+import java.sql.Connection;
+
 /**
  *
  * @author nicho
@@ -16,6 +19,8 @@ public class Lanche {
     public Lanche(String nome, double preco) {
         this.nome = nome;
         this.preco = preco;
+        
+        salvar(nome, preco);
     }
 
     /**
@@ -48,6 +53,12 @@ public class Lanche {
     
     public void apresentarLanche(){
         System.out.println("Nome:" + nome + ", R$ " + preco);
+    }
+    
+    private void salvar(String nome, double preco) {
+        Banco b = new Banco();
+        Connection conexao = b.conectar();
+        b.salvar(nome, preco, conexao);
     }
     
 }
